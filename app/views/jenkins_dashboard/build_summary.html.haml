@@ -1,0 +1,79 @@
+:javascript
+	summary = {};
+	summary.init = (function(){
+		ko.bindingHandlers.slider1 = {
+			init: function (element, valueAccessor, allBindingsAccessor) {
+	    		var options = allBindingsAccessor().sliderOptions || {};
+	    		var value = valueAccessor();
+		        //$(element).slider({value: value()}); // is this what you mean?
+		        //$(element).slider();
+		        $(element).slider('setValue', value())
+		        $(element).on('slide', function (ev) {
+		            value(ev.value);
+		        });
+	    		//$(element).slider(options);
+		    	//ko.utils.registerEventHandler(element, "slidechange", function (event, ui) {
+		       		//var observable = valueAccessor();
+		        	//observable(ui.value);
+	    		//});
+		    	//ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+		        	//$(element).slider("destroy");
+		    	//});
+		    	//ko.utils.registerEventHandler(element, "slide", function (event, ui) {
+		        	//var observable = valueAccessor();
+		        	//observable(ui.value);
+		    	//});
+			},
+			//update: function (element, valueAccessor, allBindingsAccessor) {
+		    	//var value = ko.utils.unwrapObservable(valueAccessor());
+		    	//if (isNaN(value)) value = 0;
+		    	//$(element).slider("value", value);
+		    	//$(element).slider('setValue', value);
+		    	//$(element).slider("option", allBindingsAccessor().sliderOptions);
+			//}
+		};
+		summary.ViewModel = function(){
+			self = this;
+
+			self.minSlider = ko.observable(10);
+			self.maxSlider = ko.observable(50);
+			self.valueSlider = ko.observable(25);
+
+			//$("#ex2").slider('setValue', 200);
+			$("#ex2").slider({
+				//min: self.minSlider
+				//min:25
+			});
+			//$("#ex2").slider('setValue', 200)
+			//$("#ex2").slider('setValue', self.minSlider)
+
+			$('#ex1').slider({
+				 formater: function(value) {
+				 	return value;//Date.today().add(value).days().toString('MMMM d, yyyy'); 
+				 }
+			});
+		}
+		ko.applyBindings(new summary.ViewModel());
+	});
+	$(summary.init);
+	
+
+#main
+	#header
+		%h1 JenkinsDashboard#build_summary
+		%p Find me in app/views/jenkins_dashboard/build_summary.html.haml
+	.control-group
+		.well.center{style:"height:100px;"}
+			%span
+				%b{"data-bind"=>"text:minSlider"}
+			%input#ex2.span2{"data-slider-max" => "1000", "data-slider-min" => "10", "data-slider-step" => "5", "data-slider-value" => "[250,500]", :type => "text", :value => "", style: "width:300px;"}
+			%span
+				%b{"data-bind"=>"text:valueSlider"}
+	.control-group
+		.well.center{style:"height:100px;"}
+			%span
+				%b{"data-bind"=>"text:minSlider"}
+			%input#ex1{"data-bind"=>"slider1:valueSlider", "data-slider-id" => "ex1Slider", "data-slider-max" => "100", "data-slider-min" => "0", "data-slider-step" => "1", "data-slider-value" => "14", :type => "text", style: "width:300px;"}
+			%span
+				%b{"data-bind"=>"text:maxSlider"}
+

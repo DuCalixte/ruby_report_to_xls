@@ -1,0 +1,2 @@
+module RubyReportToXls
+end
